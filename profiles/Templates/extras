@@ -1,0 +1,90 @@
+ $(document).ready(function(){
+         setInterval(function(){
+             
+         $.ajax({
+             type:'GET',
+             url:"{% url 'getProfiles' %}",
+             success: function(response){
+                         
+                $("#display-data").empty()
+                 for (var key in response.profiles)
+                 {
+                    
+                    
+                     var temp_id=response.profiles[key].id
+                     var temp=response.profiles[key].first_name
+                     var temp2=response.profiles[key].last_name
+                     var temp3=response.profiles[key].email
+                     var temp4=response.profiles[key].phone
+                     $("#display-data").append("<tr><td>"+temp_id+"</td>"+
+                     "<td>"+temp+"</td>"+"<td>"+temp2+"</td>"+
+                     "<td>"+temp3+"</td>"+"<td>"+temp4+"</td>"+
+                     "<td>"+"<a href='#' class='link-update text-primary'> edit </a>"+
+                        "<a href='delete/"+temp_id+"'"+"class='text-danger link-delete'> delete </a>"+"</td></tr>")
+                             
+                                     
+                     
+                    
+                 }
+                 
+                 if ( $.fn.dataTable.isDataTable( '#data' ) ) {
+                    
+                    table = $('#data').DataTable( {
+                        destroy: true,
+                        "lengthMenu": [[2,3,4,10, 25, 50, -1], [2,3,4,10, 25, 50, "All"]]
+                        } );
+
+                    
+                        }
+                 else{
+                    var table=$('#data').DataTable({
+                            "lengthMenu": [[2,3,4,10, 25, 50, -1], [2,3,4,10, 25, 50, "All"]]
+                            });
+                 }
+
+           /*delete*/  
+                        $(".link-delete").on("click",function(e){
+                            alert("Delete")
+                            e.preventDefault();
+                            var $this=$(this);
+                            console.log($this.attr("href"))
+                            if(confirm("Are you sure to delete the record?")){
+                                $.ajax({
+                                    url:$this.attr("href"),
+                                    
+                                    type:"GET",
+                                    dataType:"json",
+                                    success:function(resp){
+                                        if(resp.message==="success"){
+                                            alert("Success")
+                                        }
+                                        else{
+                                            alert(resp.message)
+                                        }
+                                    },
+                                    error: function(resp){
+                                        console.log("something went wrong");
+                                    }
+                                    })
+                                }
+                        })
+
+
+    
+
+        
+                 
+                
+
+             },
+             error: function(response){
+                 alert("An Error occured")
+             }
+         })
+         
+
+         },10000)
+
+
+
+        })

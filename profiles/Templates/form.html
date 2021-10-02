@@ -1,0 +1,78 @@
+
+{% extends "base.html" %}
+{% block content %}
+    <div class="container">
+        <div class="row" style="margin-bottom: 20px;">
+            <div class="col-md-8 offset-md-2">
+                <button type="button" class="btn btn-primary">
+                   
+                    <a href="/getting_profiles" style="color:white;text-decoration:none;">
+                        <i class="fas fa-angle-double-left" aria-hidden="true"></i>
+                        All users  </a>
+                </button>
+                
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-8 offset-md-2">
+                <div class="p-3 mb-2 bg-primary text-white text-center"><b>Add user </b></div>
+                <form id="post-form" action="insert" method="POST"> {% csrf_token %}
+                    <div class="form-group">
+                        <label for="FirstName">FirstName</label>
+                        <input type="first_name" class="form-control" name="first_name" id="first_name" placeholder="Enter FirstName">
+                    </div>
+                    <div class="form-group">
+                        <label for="LastName">LastName</label>
+                        <input type="last_name" class="form-control" name="last_name" id="last_name" placeholder="Enter LastName">
+                    </div>
+                    <div class="form-group">
+                    <label for="email">Email address</label>
+                    <input type="email" class="form-control" id="email" name="email" placeholder="Enter email">
+                    <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+                    </div>
+                    <div class="form-group">
+                    <label for="Phone">Phone</label>
+                    <input type="phone" class="form-control" id="phone" name="phone" placeholder="Phone number">
+                    </div>
+                    
+                    <input type="submit" class="btn btn-primary" value="Submit" name="submit">
+                </form>
+            </div>
+        </div>
+    </div>
+    <script>
+        $("#post-form").submit(function(e) {
+
+e.preventDefault(); // avoid to execute the actual submit of the form.
+
+var form = $(this);
+// var url = form.attr('action');
+
+$.ajax({
+       type: "POST",
+       url: '/insert',
+       data: form.serialize(), // serializes the form's elements.
+       
+       success: function(data)
+       {
+           alert(data); 
+           $(':input','#post-form') // show response from the HttpResponse.
+             .not(':button, :submit, :reset, :hidden')
+            .val('')
+       },
+
+       
+     });
+     
+     
+
+
+});
+
+
+
+
+    </script>
+{% endblock %}
+
+
